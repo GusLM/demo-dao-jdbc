@@ -29,10 +29,18 @@ public class Main {
 
         System.out.println("\n=== TEST 4: Seller insert ===");
         Seller newSeller = new Seller(
-                null, "Johnny Bravo", "johnnyb@mail.com", new Date(), 3200.0, department
+                null, "Clark Kent", "superman@mail.com", new Date(), 4200.0, department
         );
         sellerDao.insert(newSeller);
         System.out.println("Inserted! New id = " + newSeller.getId());
+
+        System.out.println("\n=== TEST 5: Seller update ===");
+        seller = sellerDao.findById(1);
+        seller.setName("Bruce Wayne");
+        seller.setBaseSalary(7000.0);
+        seller.setEmail("batman@batmail.com");
+        sellerDao.update(seller);
+        System.out.println("Seller updated!");
 
         DB.closeConnection();
     }
