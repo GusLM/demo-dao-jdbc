@@ -15,10 +15,16 @@ public class Program2 {
         Department department = departmentDao.findById(4);
         System.out.println(department);
 
-        System.out.println("=== TEST 2: Department insert ===");
-        Department newDepartment = new Department(null, "Mobile");
+        System.out.println("\n=== TEST 2: Department insert ===");
+        Department newDepartment = new Department(null, "Garden");
         departmentDao.insert(newDepartment);
         System.out.println("Inserted! New id = " + newDepartment.getId());
+
+        System.out.println("\n=== TEST 3: Department update ===");
+        department = departmentDao.findById(6);
+        department.setName("Fitness");
+        departmentDao.update(department);
+        System.out.println("The department name has been updated");
 
         DB.closeConnection();
     }
