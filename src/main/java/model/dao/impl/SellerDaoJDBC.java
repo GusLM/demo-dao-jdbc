@@ -20,6 +20,8 @@ public class SellerDaoJDBC implements SellerDao {
         this.connection = connection;
     }
 
+    // ===== WRITE OPERATIONS =====
+
     @Override
     public void insert(Seller obj) {
         PreparedStatement st = null;
@@ -106,6 +108,8 @@ public class SellerDaoJDBC implements SellerDao {
         }
     }
 
+    // ===== READ OPERATIONS =====
+
     @Override
     public Seller findById(Integer id) {
         PreparedStatement st = null;
@@ -131,27 +135,9 @@ public class SellerDaoJDBC implements SellerDao {
         } catch (SQLException e) {
             throw new DbException(e.getMessage());
         } finally {
-            DB.closeStatement(st);
             DB.closeResultSet(rs);
+            DB.closeStatement(st);
         }
-    }
-
-    private Seller instantiateSeller(ResultSet rs, Department department) throws SQLException {
-        Seller obj = new Seller();
-        obj.setId(rs.getInt("Id"));
-        obj.setName(rs.getString("Name"));
-        obj.setEmail(rs.getString("Email"));
-        obj.setBirthDate(rs.getDate("BirthDate"));
-        obj.setBaseSalary(rs.getDouble("BaseSalary"));
-        obj.setDepartment(department);
-        return obj;
-    }
-
-    private Department instantiateDepartment(ResultSet rs) throws SQLException {
-        Department department = new Department();
-        department.setId(rs.getInt("DepartmentId"));
-        department.setName(rs.getString("DepName"));
-        return department;
     }
 
     @Override
@@ -186,8 +172,8 @@ public class SellerDaoJDBC implements SellerDao {
         } catch (SQLException e) {
             throw new DbException(e.getMessage());
         } finally {
-            DB.closeStatement(st);
             DB.closeResultSet(rs);
+            DB.closeStatement(st);
         }
     }
 
@@ -226,8 +212,26 @@ public class SellerDaoJDBC implements SellerDao {
         } catch (SQLException e) {
             throw new DbException(e.getMessage());
         } finally {
-            DB.closeStatement(st);
             DB.closeResultSet(rs);
+            DB.closeStatement(st);
         }
+    }
+
+    private Seller instantiateSeller(ResultSet rs, Department department) throws SQLException {
+        Seller obj = new Seller();
+        obj.setId(rs.getInt("Id"));
+        obj.setName(rs.getString("Name"));
+        obj.setEmail(rs.getString("Email"));
+        obj.setBirthDate(rs.getDate("BirthDate"));
+        obj.setBaseSalary(rs.getDouble("BaseSalary"));
+        obj.setDepartment(department);
+        return obj;
+    }
+
+    private Department instantiateDepartment(ResultSet rs) throws SQLException {
+        Department department = new Department();
+        department.setId(rs.getInt("DepartmentId"));
+        department.setName(rs.getString("DepName"));
+        return department;
     }
 }

@@ -6,6 +6,7 @@ import model.dao.DepartmentDao;
 import model.entities.Department;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DepartmentDaoJDBC implements DepartmentDao {
@@ -15,6 +16,8 @@ public class DepartmentDaoJDBC implements DepartmentDao {
     public DepartmentDaoJDBC(Connection connection){
         this.connection = connection;
     }
+
+    // ===== WRITE OPERATIONS =====
 
     @Override
     public void insert(Department obj) {
@@ -90,6 +93,8 @@ public class DepartmentDaoJDBC implements DepartmentDao {
         }
     }
 
+    // ===== READ OPERATIONS =====
+
     @Override
     public Department findById(Integer id) {
         PreparedStatement st = null;
@@ -112,14 +117,32 @@ public class DepartmentDaoJDBC implements DepartmentDao {
         } catch (SQLException e) {
             throw new DbException(e.getMessage());
         } finally {
-            DB.closeStatement(st);
             DB.closeResultSet(rs);
+            DB.closeStatement(st);
         }
     }
 
     @Override
     public List<Department> findAll() {
-        return List.of();
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            st = connection.prepareStatement("SELECT * FROM department");
+            rs = st.executeQuery();
+
+            List<Department> departmentList = new ArrayList<>();
+            while (rs.next()) {
+                Department department = instantiateDepartment(rs);
+                departmentList.add(department);
+            }
+
+            return departmentList;
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closeResultSet(rs);
+            DB.closeStatement(st);
+        }
     }
 
     private Department instantiateDepartment(ResultSet rs) throws SQLException {
